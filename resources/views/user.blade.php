@@ -264,27 +264,30 @@
                         <th>Description</th>
                         <th>Actions</th>
                     </tr>
-                </thead>
-                <tbody>
-                    <tr>
-						<td>
-							<span class="custom-checkbox">
-								<input type="checkbox" id="checkbox1" name="options[]" value="1">
-								<label for="checkbox1"></label>
-							</span>
-						</td>
-                        <td>Mano</td>
-                        <td>21</td>
-						<td>Pink</td>
-                        <td>Wild Dog</td>
-                        <td>
-                            <a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-                            <a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
-                        </td>
-                    </tr>
-                    
-                    </tr> 
-                </tbody>
+                    <tbody>
+                        @foreach ($animals as $animal)
+                            <tr>
+                                <td>
+                                    <span class="custom-checkbox">
+                                        <input type="checkbox" id="checkbox1" name="options[]" value="1">
+                                        <label for="checkbox1"></label>
+                                    </span>
+                                </td>
+                                <td>{{ $animal->species }}</td>
+                                <td>{{ $animal->age }}</td>
+                                <td>{{ $animal->color }}</td>
+                                <td>{{ $animal->description }}</td>
+                                <td>
+                                    <a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                                    <form action="/animals/{{ $animal->id }}" method="POST" style="display: inline-block;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <a href="#deleteEmployeeModal" class="delete" data-toggle="modal" onclick="event.preventDefault(); this.closest('form').submit();"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                                    </form>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
             </table>
 			<div class="clearfix">
                 <div class="hint-text">Showing <b>1</b> out of <b>1</b> entries</div>
@@ -301,34 +304,35 @@
 	<div id="addEmployeeModal" class="modal fade">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				<form>
-					<div class="modal-header">						
-						<h4 class="modal-title">Add Animals</h4>
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					</div>
-					<div class="modal-body">					
-						<div class="form-group">
-							<label>Species</label>
-							<input type="text" class="form-control" required>
-						</div>
-						<div class="form-group">
-							<label>Age</label>
-							<input type="email" class="form-control" required>
-						</div>
-						<div class="form-group">
-							<label>Color</label>
-							<textarea class="form-control" required></textarea>
-						</div>
-						<div class="form-group">
-							<label>Description</label>
-							<input type="text" class="form-control" required>
-						</div>					
-					</div>
-					<div class="modal-footer">
-						<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-						<input type="submit" class="btn btn-success" value="Add">
-					</div>
-				</form>
+				<form action="/animals" method="POST">
+                    @csrf
+                    <div class="modal-header">						
+                        <h4 class="modal-title">Add Animals</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    </div>
+                    <div class="modal-body">					
+                        <div class="form-group">
+                            <label>Species</label>
+                            <input type="text" class="form-control" required name="species">
+                        </div>
+                        <div class="form-group">
+                            <label>Age</label>
+                            <input type="number" class="form-control" required name="age">
+                        </div>
+                        <div class="form-group">
+                            <label>Color</label>
+                            <textarea class="form-control" required name="color"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Description</label>
+                            <input type="text" class="form-control" required name="description">
+                        </div>					
+                    </div>
+                    <div class="modal-footer">
+                        <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                        <input type="submit" class="btn btn-success" value="Add">
+                    </div>
+                </form>
 			</div>
 		</div>
 	</div>

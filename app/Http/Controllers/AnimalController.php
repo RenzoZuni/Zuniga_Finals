@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Animal;
 
 class AnimalController extends Controller
 {
@@ -10,10 +11,10 @@ class AnimalController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-{
-    $animals = Animal::all();
-    return view('admin', ['animals' => $animals]);
-}
+    {
+        $animals = Animal::all();
+        return view('user', ['animals' => $animals]);
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -28,7 +29,14 @@ class AnimalController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $animal = new Animal;
+        $animal->species = $request->species;
+        $animal->age = $request->age;
+        $animal->color = $request->color;
+        $animal->description = $request->description;
+        $animal->save();
+    
+        return redirect('/user');
     }
 
     /**
@@ -58,8 +66,11 @@ class AnimalController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
-    {
-        //
-    }
+    public function destroy($id)
+{
+    $animal = Animal::find($id);
+    $animal->delete();
+
+    return redirect('/user');
+}
 }
