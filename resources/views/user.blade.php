@@ -282,7 +282,7 @@
                                     <form action="/animals/{{ $animal->id }}" method="POST" style="display: inline-block;">
                                         @csrf
                                         @method('DELETE')
-                                        <a href="#deleteEmployeeModal" class="delete" data-toggle="modal" onclick="event.preventDefault(); this.closest('form').submit();"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                                        <a href="#deleteEmployeeModal" class="delete" data-toggle="modal" data-id="{{ $animal->id }}"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
                                     </form>
                                 </td>
                             </tr>
@@ -375,20 +375,22 @@
 	<div id="deleteEmployeeModal" class="modal fade">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				<form>
-					<div class="modal-header">						
-						<h4 class="modal-title">Delete Animal</h4>
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					</div>
-					<div class="modal-body">					
-						<p>Are you sure you want to delete these Records?</p>
-						<p class="text-warning"><small>This action cannot be undone.</small></p>
-					</div>
-					<div class="modal-footer">
-						<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-						<input type="submit" class="btn btn-danger" value="Delete">
-					</div>
-				</form>
+				<form id="deleteForm" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <div class="modal-header">						
+                        <h4 class="modal-title">Delete Animal</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    </div>
+                    <div class="modal-body">					
+                        <p>Are you sure you want to delete these Records?</p>
+                        <p class="text-warning"><small>This action cannot be undone.</small></p>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                        <input type="submit" class="btn btn-danger" value="Delete">
+                    </div>
+                </form>
 			</div>
 		</div>
 	</div>
@@ -397,26 +399,33 @@
 
 <script>
     $(document).ready(function(){
-	// Activate tooltip
-	$('[data-toggle="tooltip"]').tooltip();
-	
-	// Select/Deselect checkboxes
-	var checkbox = $('table tbody input[type="checkbox"]');
-	$("#selectAll").click(function(){
-		if(this.checked){
-			checkbox.each(function(){
-				this.checked = true;                        
-			});
-		} else{
-			checkbox.each(function(){
-				this.checked = false;                        
-			});
-		} 
-	});
-	checkbox.click(function(){
-		if(!this.checked){
-			$("#selectAll").prop("checked", false);
-		}
-	});
-});
+        // Activate tooltip
+        $('[data-toggle="tooltip"]').tooltip();
+        
+        // Select/Deselect checkboxes
+        var checkbox = $('table tbody input[type="checkbox"]');
+        $("#selectAll").click(function(){
+            if(this.checked){
+                checkbox.each(function(){
+                    this.checked = true;                        
+                });
+            } else{
+                checkbox.each(function(){
+                    this.checked = false;                        
+                });
+            } 
+        });
+        checkbox.click(function(){
+            if(!this.checked){
+                $("#selectAll").prop("checked", false);
+            }
+        });
+
+        // Update form action in delete modal
+        $('.delete').on('click', function(){
+            var id = $(this).data('id');
+            var url = '/animals/' + id;
+            $('#deleteForm').attr('action', url);
+        });
+    });
 </script>
