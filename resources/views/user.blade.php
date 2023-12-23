@@ -225,7 +225,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Animals | Admin</title>
+<title>Animals | User</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -235,7 +235,9 @@
   
   <body>
 
+{{-- nav --}}
 
+{{-- end of nav --}}
     
     <div class="container">
         <div class="table-wrapper">
@@ -245,8 +247,13 @@
 						<h2>Manage <b>Animals</b></h2>
 					</div>
 					<div class="col-sm-6">
-						<a href="#addEmployeeModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add New Animals</span></a>						
-					</div>
+                        <form action="{{ route('logout') }}" method="POST">
+                            @csrf
+                            <button type="submit" class="btn btn-danger">
+                                <i class="material-icons">&#xe879;</i> <span>logout</span>
+                            </button>
+                        </form>						<a href="#addEmployeeModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add New Animals</span></a>						                    
+                </div>
                 </div>
             </div>
             <table class="table table-striped table-hover">
@@ -278,8 +285,7 @@
                                 <td>{{ $animal->color }}</td>
                                 <td>{{ $animal->description }}</td>
                                 <td>
-                                    <a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-                                    <form action="/animals/{{ $animal->id }}" method="POST" style="display: inline-block;">
+                                    <a href="#editEmployeeModal" class="edit" data-toggle="modal" data-id="{{ $animal->id }}" data-species="{{ $animal->species }}" data-age="{{ $animal->age }}" data-color="{{ $animal->color }}" data-description="{{ $animal->description }}"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>                                    <form action="/animals/{{ $animal->id }}" method="POST" style="display: inline-block;">
                                         @csrf
                                         @method('DELETE')
                                         <a href="#deleteEmployeeModal" class="delete" data-toggle="modal" data-id="{{ $animal->id }}"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
@@ -340,34 +346,36 @@
 	<div id="editEmployeeModal" class="modal fade">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				<form>
-					<div class="modal-header">						
-						<h4 class="modal-title">Edit Animals</h4>
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					</div>
-					<div class="modal-body">					
-						<div class="form-group">
-							<label>Species</label>
-							<input type="text" class="form-control" required>
-						</div>
-						<div class="form-group">
-							<label>Age</label>
-							<input type="email" class="form-control" required>
-						</div>
-						<div class="form-group">
-							<label>Color</label>
-							<textarea class="form-control" required></textarea>
-						</div>
-						<div class="form-group">
-							<label>Description</label>
-							<input type="text" class="form-control" required>
-						</div>					
-					</div>
-					<div class="modal-footer">
-						<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-						<input type="submit" class="btn btn-info" value="Save">
-					</div>
-				</form>
+				<form id="editForm" method="POST">
+                    @csrf
+                    @method('PUT')
+                    <div class="modal-header">						
+                        <h4 class="modal-title">Edit Animals</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    </div>
+                    <div class="modal-body">					
+                        <div class="form-group">
+                            <label>Species</label>
+                            <input type="text" class="form-control" required name="species">
+                        </div>
+                        <div class="form-group">
+                            <label>Age</label>
+                            <input type="number" class="form-control" required name="age">
+                        </div>
+                        <div class="form-group">
+                            <label>Color</label>
+                            <textarea class="form-control" required name="color"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Description</label>
+                            <input type="text" class="form-control" required name="description">
+                        </div>					
+                    </div>
+                    <div class="modal-footer">
+                        <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                        <input type="submit" class="btn btn-info" value="Save">
+                    </div>
+                </form>
 			</div>
 		</div>
 	</div>
@@ -427,5 +435,22 @@
             var url = '/animals/' + id;
             $('#deleteForm').attr('action', url);
         });
+
+        // Update form action in edit modal
+        $('.edit').on('click', function(){
+    var id = $(this).data('id');
+    var species = $(this).data('species');
+    var age = $(this).data('age');
+    var color = $(this).data('color');
+    var description = $(this).data('description');
+
+    var url = '/animals/' + id;
+    $('#editForm').attr('action', url);
+
+    $('#editForm input[name="species"]').val(species);
+    $('#editForm input[name="age"]').val(age);
+    $('#editForm textarea[name="color"]').val(color);
+    $('#editForm input[name="description"]').val(description);
+});
     });
 </script>

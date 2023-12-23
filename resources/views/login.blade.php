@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Animals | Login</title>
+	<title>Slide Navbar</title>
 	<link rel="stylesheet" type="text/css" href="slide navbar style.css">
 <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap" rel="stylesheet">
-
 <style>
     body{
 	margin: 0;
@@ -96,31 +95,37 @@ button:hover{
 #chk:checked ~ .signup label{
 	transform: scale(.6);
 }
-</style>
 
+</style>
 </head>
 <body>
 	<div class="main">  	
 		<input type="checkbox" id="chk" aria-hidden="true">
 
 			<div class="signup">
-				<form>
+				<form method="POST" action="/signup">
+                    @csrf
 					<label for="chk" aria-hidden="true">Sign up</label>
 					<input type="text" name="txt" placeholder="User name" required="">
+                    <center><select name="role">
+                        <option value="user">User</option>
+                        <option value="admin">Admin</option>
+                    </select><center>
 					<input type="email" name="email" placeholder="Email" required="">
 					<input type="password" name="pswd" placeholder="Password" required="">
 					<button>Sign up</button>
 				</form>
 			</div>
 
-			<div class="login">
-				<form>
-					<label for="chk" aria-hidden="true">Login</label>
-					<input type="email" name="email" placeholder="Email" required="">
-					<input type="password" name="pswd" placeholder="Password" required="">
-					<button>Login</button>
-				</form>
-			</div>
+            <div class="login">
+                <form method="POST" action="/login">
+                    @csrf
+                    <label for="chk" aria-hidden="true">Login</label>
+                    <input type="email" name="email" placeholder="Email" required="">
+                    <input type="password" name="password" placeholder="Password" required=""> <!-- Make sure the name attribute is 'password' -->
+                    <button>Login</button>
+                </form>
+</div>
 	</div>
 </body>
 </html>
