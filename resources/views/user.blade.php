@@ -252,10 +252,20 @@
                             <button type="submit" class="btn btn-danger">
                                 <i class="material-icons">&#xe879;</i> <span>logout</span>
                             </button>
-                        </form>						<a href="#addEmployeeModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add New Animals</span></a>						                    
+                        </form>						
+                        <a href="#addEmployeeModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add New Animals</span></a>						                    
                 </div>
                 </div>
             </div>
+            {{-- add alert --}}
+            @if (session('success'))
+            <div class="alert alert-success" id="success-alert">
+                {{ session('success') }}
+            </div>
+        @endif
+        {{-- add alert --}}
+
+        
             <table class="table table-striped table-hover">
                 <thead>
                     <tr>
@@ -295,16 +305,7 @@
                         @endforeach
                     </tbody>
             </table>
-			<div class="clearfix">
-                <div class="hint-text">Showing <b>1</b> out of <b>1</b> entries</div>
-                <ul class="pagination">
-                    <li class="page-item disabled"><a href="#">Previous</a></li>
-                    <li class="page-item"><a href="#" class="page-link">1</a></li>
-                    
-                    <li class="page-item"><a href="#" class="page-link">Next</a></li>
-                </ul>
-            </div>
-        </div>
+			{{ $animals->links() }}
     </div>
 	<!-- Edit Modal HTML -->
 	<div id="addEmployeeModal" class="modal fade">
@@ -452,5 +453,9 @@
     $('#editForm textarea[name="color"]').val(color);
     $('#editForm input[name="description"]').val(description);
 });
+$("#success-alert").fadeTo(5000, 500).slideUp(500, function(){
+        $("#success-alert").slideUp(500);
+    });
+
     });
 </script>

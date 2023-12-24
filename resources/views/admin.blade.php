@@ -254,6 +254,11 @@
 				</div>
 			</div>
 		</div>
+		@if (session('success'))
+            <div class="alert alert-success" id="success-alert">
+                {{ session('success') }}
+            </div>
+        @endif
 		<table class="table table-striped table-hover">
 			<thead>
 				<tr>
@@ -401,6 +406,11 @@
 					
                 </div>
             </div>
+			@if (session('success'))
+            <div class="alert alert-success" id="success-alert">
+                {{ session('success') }}
+            </div>
+        @endif
             <table class="table table-striped table-hover">
                 <thead>
                     <tr>
@@ -598,5 +608,8 @@
 			var url = '/animals/' + id;
 			$('#deleteForm').attr('action', url);
 		});
+		$("#success-alert").fadeTo(5000, 500).slideUp(500, function(){
+        $("#success-alert").slideUp(500);
+    });
 	});
 	</script>

@@ -15,7 +15,6 @@ class AnimalController extends Controller
     public function index()
 {
     $animals = Animal::paginate(5); // Fetch 5 animals per page
-    $animals = Animal::all(); // Fetch all animals from the database
 
     return view('user', ['animals' => $animals]);
 }
@@ -39,7 +38,7 @@ class AnimalController extends Controller
         $animal->color = $request->color;
         $animal->description = $request->description;
         $animal->save();
-    
+        session()->flash('success', 'Animal added successfully.');
         return redirect('/user');
     }
 
@@ -78,7 +77,8 @@ class AnimalController extends Controller
         $animal->color = $request->color;
         $animal->description = $request->description;
         $animal->save();
-    
+        session()->flash('success', 'Animal updated successfully.');
+
         return back();
     }
 
@@ -89,7 +89,7 @@ class AnimalController extends Controller
 {
     $animal = Animal::find($id);
     $animal->delete();
-
+    session()->flash('success', 'Animal deleted successfully.');
     return back();
 }
 
@@ -98,7 +98,7 @@ public function accept($id)
     $animal = Animal::find($id);
     $animal->status = 'accepted';
     $animal->save();
-
+    session()->flash('success', 'Animal accepted successfully.');
     return redirect('/admin');
 }
 
@@ -106,7 +106,7 @@ public function reject($id)
 {
     $animal = Animal::find($id);
     $animal->delete(); // Delete the animal
-
+    session()->flash('success', 'Animal rejected successfully.');
     return redirect('/admin');
 }
 }
